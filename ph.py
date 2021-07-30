@@ -15,8 +15,7 @@ file = {'file1': open('7.jpg', 'rb'),
 'file3': open('5.jpg', 'rb'),
 'file4': open('4.jpg', 'rb'),
 'file5': open('3.jpg', 'rb'),
-'file6': open('2.jpg', 'rb'), 
-'file7': open('1.jpg', 'rb'), }
+'file6': open('2.jpg', 'rb'), }
 
 def upload() -> dict:
     with open('config.json', 'r') as f:
