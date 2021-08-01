@@ -8,7 +8,10 @@ from random import choice
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-vk = vk_api.VkApi(token=config['token']).get_api()
+
+
+
+
 
 name = 'd3adluvv?'
 
@@ -18,6 +21,27 @@ file = {'file1': open('7.jpg', 'rb'),
 'file4': open('4.jpg', 'rb'),
 'file5': open('3.jpg', 'rb'),
 'file6': open('2.jpg', 'rb'), }
+
+def login() -> str:
+    while True:
+        token = input("Введи токен: ")
+        try:
+            user = vk_api.VkApi(token=token).get_api().users.get()[0]
+            name = '{} {}'.format(user['first_name'], user['last_name'])
+            print(f'Успешная авторизация как {name} !\n\nНачинаю накрутку...')
+            return token
+
+        except vk_api.exceptions.VkApiError:
+            print('Неверный токен.')
+            continue
+
+
+if not config['token']:
+    config['token'] = login()
+    with open('config.json', 'w') as f: 
+        json.dump(config, f, indent = 4)
+
+vk = vk_api.VkApi(token=config['token']).get_api()
 
 def upload() -> dict:
     with open('config.json', 'r') as f:
@@ -35,6 +59,14 @@ def newAlbum() -> int:
         return albumId
     else:
         return choice(noFullAlbums)
+
+if not config['albumId']:
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+    config['albumId'] = newAlbum()
+    with open('config.json', 'w') as f:
+        json.dump(config, f, indent = 4)
+
 try:
     r = upload()
     phlist, hash, server, album = r['photos_list'], r['hash'], r['server'], r['aid']
@@ -47,6 +79,10 @@ except vk_api.exceptions.VkApiError as e:
             json.dump(config, f, indent = 4)
         r = upload()
         phlist, hash, server, album = r['photos_list'], r['hash'], r['server'], r['aid']
+
+
+
+
 
 
 while True:
