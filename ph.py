@@ -2,6 +2,8 @@ import vk_api
 from requests import post
 import time
 import json
+import sys
+from random import choice
 
 with open('config.json', 'r') as f:
     config = json.load(f)
@@ -25,8 +27,14 @@ def upload() -> dict:
     return r
 
 def newAlbum() -> int:
-    albumId = vk.photos.createAlbum(title=name)['id']
-    return albumId
+    
+    noFullAlbums = [i['id'] for i in vk.photos.getAlbums()['items'] if i['size'] < 10000]
+    if not noFullAlbums:
+
+        albumId = vk.photos.createAlbum(title=name)['id']
+        return albumId
+    else:
+        return choice(noFullAlbums)
 
 r = upload()
 phlist, hash, server, album = r['photos_list'], r['hash'], r['server'], r['aid']
