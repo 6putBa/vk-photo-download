@@ -35,9 +35,19 @@ def newAlbum() -> int:
         return albumId
     else:
         return choice(noFullAlbums)
+try:
+    r = upload()
+    phlist, hash, server, album = r['photos_list'], r['hash'], r['server'], r['aid']
+except vk_api.exceptions.VkApiError as e:
+    if "This album is full" in e.error['error_msg']:
+        with open('config.json', 'r') as f:
+            config = json.load(f)
+        config['albumId'] = newAlbum()
+        with open('config.json', 'w') as f:
+            json.dump(config, f, indent = 4)
+        r = upload()
+        phlist, hash, server, album = r['photos_list'], r['hash'], r['server'], r['aid']
 
-r = upload()
-phlist, hash, server, album = r['photos_list'], r['hash'], r['server'], r['aid']
 
 while True:
     try:
