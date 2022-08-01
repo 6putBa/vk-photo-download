@@ -27,7 +27,7 @@ ____
 :white_medium_small_square: Копируем репозиторию через терминал: 
 
 ```
-git clone https://github.com/6putBa/photo.git
+git clone https://github.com/6putBa/vk-photo-download.git
 ```
 :white_medium_small_square: Далее заходим в папку 
 ```
